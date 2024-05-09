@@ -1,4 +1,4 @@
-package com.msfb.majumundurapplication;
+package com.msfb.maju_mundur_application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
