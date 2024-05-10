@@ -4,4 +4,5 @@ import com.msfb.maju_mundur_application.entity.Customer;
 
 public interface CustomerService {
     void createCustomer(Customer customer);
+    Customer getCustomerById(String id);
 }

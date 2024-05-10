@@ -3,4 +3,5 @@ package com.msfb.maju_mundur_application.constant;
 public class ApiRoute {
     public static final String API_AUTH = "/api/auth";
     public static final String API_PRODUCT = "/api/products";
+    public static final String API_TRANSACTION = "/api/transactions";
 }
