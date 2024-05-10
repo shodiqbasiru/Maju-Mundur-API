@@ -7,6 +7,9 @@ import com.msfb.maju_mundur_application.dto.response.CustomResponse;
 import com.msfb.maju_mundur_application.dto.response.ProductResponse;
 import com.msfb.maju_mundur_application.entity.Product;
 import com.msfb.maju_mundur_application.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +21,16 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiRoute.API_PRODUCT)
+@Tag(name = "Product", description = "API for product")
 public class ProductController {
 
     private final ProductService productService;
 
+    @Operation(
+            summary = "Create",
+            description = "Create new product"
+    )
+    @SecurityRequirement(name = "Authorization")
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -36,6 +45,11 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Get All",
+            description = "Get all product"
+    )
+    @SecurityRequirement(name = "Authorization")
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -49,6 +63,11 @@ public class ProductController {
         return ResponseEntity.ok(responses);
     }
 
+    @Operation(
+            summary = "Get By Id",
+            description = "Get product by id"
+    )
+    @SecurityRequirement(name = "Authorization")
     @GetMapping(
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -63,6 +82,11 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+            summary = "Update",
+            description = "Update product"
+    )
+    @SecurityRequirement(name = "Authorization")
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -77,8 +101,13 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+            summary = "Delete",
+            description = "Delete product by id"
+    )
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<CustomResponse<Product>> delete(@PathVariable String id){
+    public ResponseEntity<CustomResponse<Product>> delete(@PathVariable String id) {
         productService.deleteProduct(id);
         CustomResponse<Product> response = CustomResponse.<Product>builder()
                 .statusCode(HttpStatus.OK.value())

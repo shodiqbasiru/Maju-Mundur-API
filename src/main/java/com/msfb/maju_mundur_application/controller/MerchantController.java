@@ -4,6 +4,9 @@ import com.msfb.maju_mundur_application.constant.ApiRoute;
 import com.msfb.maju_mundur_application.dto.response.CustomResponse;
 import com.msfb.maju_mundur_application.entity.Merchant;
 import com.msfb.maju_mundur_application.service.MerchantService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +18,16 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiRoute.API_MERCHANT)
+@Tag(name = "Merchant", description = "API for merchant")
 public class MerchantController {
 
     private final MerchantService merchantService;
 
+    @Operation(
+            summary = "Get All",
+            description = "Get all merchant"
+    )
+    @SecurityRequirement(name = "Authorization")
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -32,6 +41,11 @@ public class MerchantController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(
+            summary = "Get By Id",
+            description = "Get merchant by id"
+    )
+    @SecurityRequirement(name = "Authorization")
     @GetMapping(
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -46,6 +60,11 @@ public class MerchantController {
         return ResponseEntity.ok(customResponse);
     }
 
+    @Operation(
+            summary = "Update",
+            description = "Update merchant"
+    )
+    @SecurityRequirement(name = "Authorization")
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -60,6 +79,11 @@ public class MerchantController {
         return ResponseEntity.ok(customResponse);
     }
 
+    @Operation(
+            summary = "Delete",
+            description = "Delete merchant by id"
+    )
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<CustomResponse<Merchant>> delete(@PathVariable String id) {
         merchantService.delete(id);

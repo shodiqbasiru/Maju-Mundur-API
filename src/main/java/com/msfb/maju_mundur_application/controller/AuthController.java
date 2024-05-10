@@ -9,6 +9,9 @@ import com.msfb.maju_mundur_application.dto.response.LoginResponse;
 import com.msfb.maju_mundur_application.dto.response.RegisterCustomerResponse;
 import com.msfb.maju_mundur_application.dto.response.RegisterMerchantResponse;
 import com.msfb.maju_mundur_application.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,9 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiRoute.API_AUTH)
+@Tag(name = "Auth", description = "API for authentication")
 public class AuthController {
     private final AuthService authService;
 
+    @Operation(
+            summary = "Register Customer",
+            description = "Register new customer"
+    )
     @PostMapping(
             path = "/register-customer",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -36,6 +44,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Register Merchant",
+            description = "Register new merchant"
+    )
     @PostMapping(
             path = "/register-merchant",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -51,6 +63,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Login",
+            description = "Login to the system"
+    )
     @PostMapping(
             path = "/login",
             consumes = MediaType.APPLICATION_JSON_VALUE,

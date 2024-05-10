@@ -6,6 +6,9 @@ import com.msfb.maju_mundur_application.dto.response.CustomResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionResultResponse;
 import com.msfb.maju_mundur_application.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +20,16 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = ApiRoute.API_TRANSACTION)
+@Tag(name = "Transaction", description = "API for transaction")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
+    @Operation(
+            summary = "Create",
+            description = "Create new transaction"
+    )
+    @SecurityRequirement(name = "Authorization")
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
@@ -35,6 +44,11 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            summary = "Get All",
+            description = "Get all transaction"
+    )
+    @SecurityRequirement(name = "Authorization")
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
