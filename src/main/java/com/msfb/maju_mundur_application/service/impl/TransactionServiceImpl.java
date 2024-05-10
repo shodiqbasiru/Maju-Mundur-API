@@ -1,7 +1,7 @@
 package com.msfb.maju_mundur_application.service.impl;
 
 import com.msfb.maju_mundur_application.dto.request.TransactionRequest;
-import com.msfb.maju_mundur_application.dto.response.CustomerResponse;
+import com.msfb.maju_mundur_application.dto.response.CustomerInfoResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionDetailResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionResultResponse;
@@ -36,7 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public TransactionResultResponse createTransaction(TransactionRequest request) {
-        Customer customer = customerService.getCustomerById(request.getCustomerId());
+        Customer customer = customerService.getById(request.getCustomerId());
         Transaction transaction = Transaction.builder()
                 .date(new Date())
                 .customer(customer)
@@ -89,7 +89,7 @@ public class TransactionServiceImpl implements TransactionService {
         return TransactionResultResponse.builder()
                 .id(transaction.getId())
                 .trxDate(transaction.getDate())
-                .customer(CustomerResponse.builder()
+                .customer(CustomerInfoResponse.builder()
                         .id(transaction.getCustomer().getId())
                         .reward(totalReward.get() - oldReward)
                         .point(totalReward.get())

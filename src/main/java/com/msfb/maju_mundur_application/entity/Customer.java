@@ -26,4 +26,8 @@ public class Customer {
 
     @Column(name = "reward")
     private Integer reward;
+
+    @OneToOne
+    @JoinColumn(name = "account_id", unique = true)
+    private Account account;
 }

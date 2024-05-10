@@ -1,5 +1,6 @@
 package com.msfb.maju_mundur_application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,4 +24,9 @@ public class Merchant {
 
     @Column(name = "address")
     private String address;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "account_id", unique = true)
+    private Account account;
 }

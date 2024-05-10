@@ -30,7 +30,7 @@ public class TransactionRewardServiceImpl implements TransactionRewardService {
     @Override
     public TransactionRewardResponse createTrxReward(TransactionRewardRequest request) {
         Reward reward = rewardService.getById(request.getRewardId());
-        Customer customer = customerService.getCustomerById(request.getCustomerId());
+        Customer customer = customerService.getById(request.getCustomerId());
 
         if (customer.getReward() - reward.getPoint() < 0)
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "not enough points");

@@ -1,4 +1,4 @@
-package com.msfb.maju_mundur_application.dto.response;
+package com.msfb.maju_mundur_application.dto.request;
 
 import lombok.*;
 
@@ -7,10 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerResponse {
+public class CustomerRequest {
     private String id;
     private String customerName;
     private String phoneNumber;
     private String address;
-    private String email;
 }

@@ -14,11 +14,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final AuthenticationFilter authenticationFilter;
+    private final AccessDeniedHandlerImpl accessDeniedHandler;
+    private final AuthenticationEntryPointImpl authenticationEntryPoint;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(config -> {
+                    config.accessDeniedHandler(accessDeniedHandler);
+                    config.authenticationEntryPoint(authenticationEntryPoint);
+                })
                 .sessionManagement(cfg -> cfg.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/api/auth/**").permitAll()

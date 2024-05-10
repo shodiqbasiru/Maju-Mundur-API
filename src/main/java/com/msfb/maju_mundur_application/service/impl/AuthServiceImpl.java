@@ -14,6 +14,7 @@ import com.msfb.maju_mundur_application.entity.Role;
 import com.msfb.maju_mundur_application.repository.AccountRepository;
 import com.msfb.maju_mundur_application.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -53,6 +55,7 @@ public class AuthServiceImpl implements AuthService {
 
         Customer customer = Customer.builder()
                 .customerName(request.getCustomerName())
+                .account(account)
                 .build();
         customerService.createCustomer(customer);
 
@@ -80,6 +83,7 @@ public class AuthServiceImpl implements AuthService {
 
         Merchant merchant = Merchant.builder()
                 .merchantName(request.getMerchantName())
+                .account(account)
                 .build();
         merchantService.createMerchant(merchant);
 
@@ -100,6 +104,9 @@ public class AuthServiceImpl implements AuthService {
         Authentication authenticate = authenticationManager.authenticate(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Account account = (Account) authenticate.getPrincipal();
+        if (!account.getIsEnable()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Account is not active");
+        }
         String token = jwtService.generateToken(account);
         return LoginResponse.builder()
                 .username(account.getUsername())
