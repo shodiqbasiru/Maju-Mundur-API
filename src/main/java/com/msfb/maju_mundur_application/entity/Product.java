@@ -24,6 +24,9 @@ public class Product {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
+    @Column(name = "is_delete")
+    private Boolean isDelete;
+
     @ManyToOne
     @JoinColumn(name = "merchant_id", nullable = false)
     private Merchant merchant;

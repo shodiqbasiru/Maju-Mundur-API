@@ -23,4 +23,7 @@ public class Customer {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "reward")
+    private Integer reward;
 }
