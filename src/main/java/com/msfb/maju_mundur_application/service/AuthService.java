@@ -11,4 +11,5 @@ public interface AuthService {
     RegisterCustomerResponse registerCustomer(RegisterCustomerRequest request);
     RegisterMerchantResponse registerMerchant(RegisterMerchantRequest request);
     LoginResponse login (LoginRequest request);
+    boolean validateToken();
 }

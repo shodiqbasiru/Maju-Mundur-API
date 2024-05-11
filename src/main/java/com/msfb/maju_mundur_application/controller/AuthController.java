@@ -10,7 +10,6 @@ import com.msfb.maju_mundur_application.dto.response.RegisterCustomerResponse;
 import com.msfb.maju_mundur_application.dto.response.RegisterMerchantResponse;
 import com.msfb.maju_mundur_application.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -82,4 +81,21 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(path = "validate-token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> validateToken() {
+        boolean isValid = authService.validateToken();
+        if (isValid) {
+            CustomResponse<String> response = CustomResponse.<String>builder()
+                    .statusCode(HttpStatus.OK.value())
+                    .message("Get data successfully")
+                    .build();
+            return ResponseEntity.ok(response);
+        } else {
+            CustomResponse<String> response = CustomResponse.<String>builder()
+                    .statusCode(HttpStatus.UNAUTHORIZED.value())
+                    .message("Invalid jwt token")
+                    .build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
 }

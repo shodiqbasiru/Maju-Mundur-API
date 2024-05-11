@@ -13,7 +13,9 @@ import com.msfb.maju_mundur_application.entity.Merchant;
 import com.msfb.maju_mundur_application.entity.Role;
 import com.msfb.maju_mundur_application.repository.AccountRepository;
 import com.msfb.maju_mundur_application.service.*;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,30 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
+
+    @Value("${maju_mundur.username.admin}")
+    private String adminUsername;
+
+    @Value("${maju_mundur.password.admin}")
+    private String adminPassword;
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostConstruct
+    public void initAdmin() {
+        Optional<Account> account = accountRepository.findByUsername(adminUsername);
+        if (account.isPresent()) return;
+
+        Role role = roleService.getOrSave(UserRole.ROLE_ADMIN);
+        String hashPassword = encoder.encode(adminPassword);
+
+        Account admin = Account.builder()
+                .username("admin")
+                .password(hashPassword)
+                .roles(List.of(role))
+                .isEnable(true)
+                .build();
+        accountRepository.saveAndFlush(admin);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -113,5 +140,12 @@ public class AuthServiceImpl implements AuthService {
                 .roles(account.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 .token(token)
                 .build();
+    }
+
+    @Override
+    public boolean validateToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Account account = accountRepository.findByUsername(authentication.getPrincipal().toString()).orElse(null);
+        return account != null;
     }
 }
