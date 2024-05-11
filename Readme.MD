@@ -2,17 +2,19 @@
 
 ## Description
 
-This is a RESTful API for a clothes marketplace application. The application allows users to register 
-as customers or merchants, and create transactions.
+Maju Mundur API is a RESTful API for a clothes marketplace application. It is built using Java and Spring Boot. 
+The API provides endpoints for user authentication, customer registration, merchant registration, and transaction creation.
 
 ## Technologies Used
 
 - Java
 - Spring Boot
 - Maven
+- Spring Data JPA
 - PostgreSQL
 - JWT
 - Lombok
+- Swagger OpenAPI
 
 ## Setup and Installation
 
@@ -26,18 +28,10 @@ as customers or merchants, and create transactions.
 - User authentication
 - Customer registration
 - Merchant registration
+- Product creation
+- Reward creation
 - Transaction creation
 
-## Usage
+## API Documentation
 
-### Register a Customer
-
-Endpoint: `<endpoint-url>`
-
-Request body:
-```json
-{
-  "username": "<username>",
-  "password": "<password>",
-  "customerName": "<customerName>"
-}
+The API documentation is available at `http://localhost:8080/swagger-ui.html`.
