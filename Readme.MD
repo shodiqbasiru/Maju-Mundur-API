@@ -16,6 +16,10 @@ The API provides endpoints for user authentication, customer registration, merch
 - Lombok
 - Swagger OpenAPI
 
+## Database Schema
+
+![img.png](img.png)
+
 ## Setup and Installation
 
 1. Clone the repository: `git clone <repository-url>`
