@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class MerchantController {
             description = "Update merchant"
     )
     @SecurityRequirement(name = "Authorization")
+    @PreAuthorize("hasAnyRole('ADMIN') or @authorizeSecurity.checkSameIdAsPrincipalMerchant(#request)")
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -84,6 +86,7 @@ public class MerchantController {
             description = "Delete merchant by id"
     )
     @SecurityRequirement(name = "Authorization")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<CustomResponse<Merchant>> delete(@PathVariable String id) {
         merchantService.delete(id);

@@ -26,6 +26,10 @@ public class Transaction {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "merchant_id")
+    private Merchant merchant;
+
     @OneToMany(mappedBy = "transaction")
     private List<TransactionDetail> trxDetails;
 }

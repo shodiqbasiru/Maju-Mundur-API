@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class TransactionRewardController {
             description = "Create new transaction reward"
     )
     @SecurityRequirement(name = "Authorization")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CUSTOMER')")
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -48,6 +50,7 @@ public class TransactionRewardController {
             description = "Get all transaction reward"
     )
     @SecurityRequirement(name = "Authorization")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )

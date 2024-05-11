@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class TransactionResponse {
     private String id;
+    private String customerName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date trxDate;
     private List<TransactionDetailResponse> transactionDetails;

@@ -5,15 +5,9 @@ import com.msfb.maju_mundur_application.dto.response.CustomerInfoResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionDetailResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionResponse;
 import com.msfb.maju_mundur_application.dto.response.TransactionResultResponse;
-import com.msfb.maju_mundur_application.entity.Customer;
-import com.msfb.maju_mundur_application.entity.Product;
-import com.msfb.maju_mundur_application.entity.Transaction;
-import com.msfb.maju_mundur_application.entity.TransactionDetail;
+import com.msfb.maju_mundur_application.entity.*;
 import com.msfb.maju_mundur_application.repository.TransactionRepository;
-import com.msfb.maju_mundur_application.service.CustomerService;
-import com.msfb.maju_mundur_application.service.ProductService;
-import com.msfb.maju_mundur_application.service.TransactionDetailService;
-import com.msfb.maju_mundur_application.service.TransactionService;
+import com.msfb.maju_mundur_application.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,14 +26,18 @@ public class TransactionServiceImpl implements TransactionService {
     private final CustomerService customerService;
     private final TransactionDetailService trxDetailService;
     private final ProductService productService;
+    private final UserService userService;
+    private final MerchantService merchantService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public TransactionResultResponse createTransaction(TransactionRequest request) {
         Customer customer = customerService.getById(request.getCustomerId());
+        Merchant merchant = merchantService.getMerchantById(request.getMerchantId());
         Transaction transaction = Transaction.builder()
                 .date(new Date())
                 .customer(customer)
+                .merchant(merchant)
                 .build();
         transactionRepository.saveAndFlush(transaction);
 
@@ -67,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
                 }).toList();
 
         int priceLimits = 500000;
-        if (totalTransaction.get() > priceLimits){
+        if (totalTransaction.get() > priceLimits) {
             int rewardB = 40;
             totalReward.set(oldReward + rewardB);
         } else {
@@ -101,10 +99,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<TransactionResponse> getAllTransaction() {
+        String accountId = userService.getByContext().getId();
         return transactionRepository.findAll().stream()
+                .filter(transaction ->
+                        transaction.getMerchant().getAccount().getId().equals(accountId) ||
+                                transaction.getCustomer().getAccount().getId().equals(accountId)
+                )
                 .map(transaction -> TransactionResponse.builder()
                         .id(transaction.getId())
                         .trxDate(transaction.getDate())
+                        .customerName(transaction.getCustomer().getCustomerName())
                         .transactionDetails(transaction.getTrxDetails().stream()
                                 .map(trxDetail -> TransactionDetailResponse.builder()
                                         .id(trxDetail.getId())
